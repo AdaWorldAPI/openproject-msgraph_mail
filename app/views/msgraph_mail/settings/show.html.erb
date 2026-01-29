@@ -12,7 +12,6 @@ modify it under the terms of the GNU General Public License version 3.
   header.with_title { t("msgraph_mail.menu_title") }
   header.with_breadcrumbs([
     { href: admin_index_path, text: t(:label_administration) },
-    { href: admin_settings_aggregation_path, text: t(:"menus.admin.mails_and_notifications") },
     t("msgraph_mail.menu_title")
   ])
 end %>
@@ -153,14 +152,14 @@ end %>
   
   <div style="display: flex; gap: 1em; margin-top: 1em; flex-wrap: wrap;">
     <% if @config.valid? %>
-      <%= link_to msgraph_mail_settings_test_connection_path,
+      <%= link_to test_connection_msgraph_mail_settings_path,
                   method: :post,
                   class: "button" do %>
         <span class="icon-context icon-relations"></span>
         <%= t("msgraph_mail.settings.test_connection") %>
       <% end %>
       
-      <%= link_to msgraph_mail_settings_send_test_email_path,
+      <%= link_to send_test_email_msgraph_mail_settings_path,
                   method: :post,
                   class: "button" do %>
         <span class="icon-context icon-mail1"></span>
@@ -168,7 +167,7 @@ end %>
       <% end %>
       
       <% if @is_active %>
-        <%= link_to msgraph_mail_settings_deactivate_path,
+        <%= link_to deactivate_msgraph_mail_settings_path,
                     method: :post,
                     class: "button -danger",
                     data: { confirm: t("msgraph_mail.settings.deactivate_confirm") } do %>
@@ -176,7 +175,7 @@ end %>
           <%= t("msgraph_mail.settings.deactivate") %>
         <% end %>
       <% else %>
-        <%= link_to msgraph_mail_settings_activate_path,
+        <%= link_to activate_msgraph_mail_settings_path,
                     method: :post,
                     class: "button -primary",
                     data: { confirm: t("msgraph_mail.settings.activate_confirm") } do %>
