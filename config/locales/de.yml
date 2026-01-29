@@ -1,0 +1,64 @@
+de:
+  msgraph_mail:
+    menu_title: "MS Graph Mail"
+    settings:
+      status: "Status"
+      configuration: "Konfiguration"
+      actions: "Aktionen"
+      azure_setup: "Azure AD Einrichtung"
+      
+      delivery_method: "E-Mail-Zustellmethode"
+      active: "MS Graph Mail ist AKTIV"
+      inactive: "Inaktiv (aktuelle Methode: %{current})"
+      
+      variable: "Umgebungsvariable"
+      value: "Wert"
+      not_set: "Nicht gesetzt"
+      
+      env_instructions_html: >
+        Konfigurieren Sie MS Graph Mail über Umgebungsvariablen. 
+        Setzen Sie diese in Ihrer Deployment-Konfiguration oder <code>.env</code>-Datei.
+      
+      configuration_complete: "Alle erforderlichen Einstellungen sind konfiguriert."
+      configuration_incomplete: "Konfiguration unvollständig. Bitte setzen Sie alle erforderlichen Umgebungsvariablen."
+      configuration_invalid: "Konfiguration unvollständig. Bitte setzen Sie alle erforderlichen Umgebungsvariablen."
+      configure_first: "Bitte konfigurieren Sie alle erforderlichen Umgebungsvariablen, bevor Sie diese Aktionen verwenden."
+      
+      test_connection: "Verbindung testen"
+      test_connection_success: "Verbindung zu Microsoft Graph API erfolgreich!"
+      test_connection_failed: "Verbindung fehlgeschlagen: %{error}"
+      
+      send_test_email: "Test-E-Mail senden"
+      test_email_sent: "Test-E-Mail an %{email} gesendet"
+      test_email_failed: "Test-E-Mail konnte nicht gesendet werden: %{error}"
+      
+      activate_msgraph: "MS Graph Mail aktivieren"
+      activate_confirm: "Dies ändert die E-Mail-Zustellung auf MS Graph. Fortfahren?"
+      activated: "MS Graph Mail wurde als E-Mail-Zustellmethode aktiviert."
+      activation_failed: "Aktivierung fehlgeschlagen: %{error}"
+      cannot_activate_invalid: "Aktivierung nicht möglich - Konfiguration unvollständig."
+      
+      deactivate: "Deaktivieren"
+      deactivate_confirm: "Dies ändert die E-Mail-Zustellung zurück auf SMTP. Fortfahren?"
+      deactivated: "MS Graph Mail wurde deaktiviert. E-Mail-Zustellung ist jetzt auf SMTP gesetzt."
+      deactivation_failed: "Deaktivierung fehlgeschlagen: %{error}"
+      
+      azure_instructions: "Um MS Graph Mail zu nutzen, müssen Sie eine Anwendung in Azure AD registrieren:"
+      azure_step1_html: >
+        Gehen Sie zu <a href="https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" 
+        target="_blank" rel="noopener">Azure Portal → App-Registrierungen</a>
+      azure_step2: "Erstellen Sie eine neue Registrierung (oder wählen Sie eine bestehende)"
+      azure_step3: "Notieren Sie die Anwendungs-ID (Client-ID) und Verzeichnis-ID (Mandanten-ID)"
+      azure_step4: "Unter 'Zertifikate & Geheimnisse' erstellen Sie ein neues Clientgeheimnis"
+      azure_step5: "Unter 'API-Berechtigungen' fügen Sie hinzu: Microsoft Graph → Anwendungsberechtigungen → Mail.Send, dann erteilen Sie die Administratorzustimmung"
+      
+      required_permissions: "Erforderliche API-Berechtigungen"
+      permission_mail_send: "E-Mail als beliebiger Benutzer senden (Anwendungsberechtigung)"
+
+  activerecord:
+    errors:
+      models:
+        msgraph_mail:
+          attributes:
+            base:
+              invalid_configuration: "MS Graph Mail Konfiguration ist ungültig"
