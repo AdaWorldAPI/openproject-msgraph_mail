@@ -1,0 +1,222 @@
+<%#-- copyright
+OpenProject MS Graph Mail Module
+Copyright (C) 2025 Jan Hübener / DATAGROUP
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+++#%>
+
+<% html_title t(:label_administration), t("msgraph_mail.menu_title") %>
+
+<%= render(Primer::OpenProject::PageHeader.new) do |header|
+  header.with_title { t("msgraph_mail.menu_title") }
+  header.with_breadcrumbs([
+    { href: admin_index_path, text: t(:label_administration) },
+    { href: admin_settings_aggregation_path, text: t(:"menus.admin.mails_and_notifications") },
+    t("msgraph_mail.menu_title")
+  ])
+end %>
+
+<section class="form--section">
+  <h3 class="form--section-title"><%= t("msgraph_mail.settings.status") %></h3>
+  
+  <div class="form--field">
+    <label class="form--label"><%= t("msgraph_mail.settings.delivery_method") %></label>
+    <span class="form--field-container">
+      <% if @is_active %>
+        <span class="icon-context icon-checkmark" style="color: green;"></span>
+        <strong style="color: green;"><%= t("msgraph_mail.settings.active") %></strong>
+      <% else %>
+        <span class="icon-context icon-warning" style="color: #666;"></span>
+        <span><%= t("msgraph_mail.settings.inactive", current: @current_delivery_method || "none") %></span>
+      <% end %>
+    </span>
+  </div>
+</section>
+
+<section class="form--section">
+  <h3 class="form--section-title"><%= t("msgraph_mail.settings.configuration") %></h3>
+  
+  <p class="form--field-instructions">
+    <%= t("msgraph_mail.settings.env_instructions_html").html_safe %>
+  </p>
+
+  <table class="generic-table" style="margin-top: 1em;">
+    <thead>
+      <tr>
+        <th><%= t("msgraph_mail.settings.variable") %></th>
+        <th><%= t("msgraph_mail.settings.status") %></th>
+        <th><%= t("msgraph_mail.settings.value") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>MSGRAPH_TENANT_ID</code></td>
+        <td>
+          <% if @config.tenant_id.present? %>
+            <span class="icon-context icon-checkmark" style="color: green;"></span>
+          <% else %>
+            <span class="icon-context icon-close" style="color: red;"></span>
+          <% end %>
+        </td>
+        <td>
+          <% if @config.tenant_id.present? %>
+            <code><%= @config.tenant_id[0..7] %>...</code>
+          <% else %>
+            <em style="color: #999;"><%= t("msgraph_mail.settings.not_set") %></em>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><code>MSGRAPH_CLIENT_ID</code></td>
+        <td>
+          <% if @config.client_id.present? %>
+            <span class="icon-context icon-checkmark" style="color: green;"></span>
+          <% else %>
+            <span class="icon-context icon-close" style="color: red;"></span>
+          <% end %>
+        </td>
+        <td>
+          <% if @config.client_id.present? %>
+            <code><%= @config.client_id[0..7] %>...</code>
+          <% else %>
+            <em style="color: #999;"><%= t("msgraph_mail.settings.not_set") %></em>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><code>MSGRAPH_CLIENT_SECRET</code></td>
+        <td>
+          <% if @config.client_secret.present? %>
+            <span class="icon-context icon-checkmark" style="color: green;"></span>
+          <% else %>
+            <span class="icon-context icon-close" style="color: red;"></span>
+          <% end %>
+        </td>
+        <td>
+          <% if @config.client_secret.present? %>
+            <code>••••••••</code>
+          <% else %>
+            <em style="color: #999;"><%= t("msgraph_mail.settings.not_set") %></em>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><code>MSGRAPH_SENDER_EMAIL</code></td>
+        <td>
+          <% if @config.sender_email.present? %>
+            <span class="icon-context icon-checkmark" style="color: green;"></span>
+          <% else %>
+            <span class="icon-context icon-close" style="color: red;"></span>
+          <% end %>
+        </td>
+        <td>
+          <% if @config.sender_email.present? %>
+            <code><%= @config.sender_email %></code>
+          <% else %>
+            <em style="color: #999;"><%= t("msgraph_mail.settings.not_set") %></em>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><code>MSGRAPH_SENDER_NAME</code></td>
+        <td>
+          <span class="icon-context icon-checkmark" style="color: green;"></span>
+        </td>
+        <td><code><%= @config.sender_name %></code></td>
+      </tr>
+      <tr>
+        <td><code>MSGRAPH_SAVE_TO_SENT_ITEMS</code></td>
+        <td>
+          <span class="icon-context icon-checkmark" style="color: green;"></span>
+        </td>
+        <td><code><%= @config.save_to_sent_items %></code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <% if @config.valid? %>
+    <div class="flash notice" style="margin-top: 1em;">
+      <span class="icon-context icon-checkmark"></span>
+      <%= t("msgraph_mail.settings.configuration_complete") %>
+    </div>
+  <% else %>
+    <div class="flash error" style="margin-top: 1em;">
+      <span class="icon-context icon-close"></span>
+      <%= t("msgraph_mail.settings.configuration_incomplete") %>
+    </div>
+  <% end %>
+</section>
+
+<section class="form--section">
+  <h3 class="form--section-title"><%= t("msgraph_mail.settings.actions") %></h3>
+  
+  <div style="display: flex; gap: 1em; margin-top: 1em; flex-wrap: wrap;">
+    <% if @config.valid? %>
+      <%= link_to msgraph_mail_settings_test_connection_path,
+                  method: :post,
+                  class: "button" do %>
+        <span class="icon-context icon-relations"></span>
+        <%= t("msgraph_mail.settings.test_connection") %>
+      <% end %>
+      
+      <%= link_to msgraph_mail_settings_send_test_email_path,
+                  method: :post,
+                  class: "button" do %>
+        <span class="icon-context icon-mail1"></span>
+        <%= t("msgraph_mail.settings.send_test_email") %>
+      <% end %>
+      
+      <% if @is_active %>
+        <%= link_to msgraph_mail_settings_deactivate_path,
+                    method: :post,
+                    class: "button -danger",
+                    data: { confirm: t("msgraph_mail.settings.deactivate_confirm") } do %>
+          <span class="icon-context icon-close"></span>
+          <%= t("msgraph_mail.settings.deactivate") %>
+        <% end %>
+      <% else %>
+        <%= link_to msgraph_mail_settings_activate_path,
+                    method: :post,
+                    class: "button -primary",
+                    data: { confirm: t("msgraph_mail.settings.activate_confirm") } do %>
+          <span class="icon-context icon-checkmark"></span>
+          <%= t("msgraph_mail.settings.activate_msgraph") %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p><em><%= t("msgraph_mail.settings.configure_first") %></em></p>
+    <% end %>
+  </div>
+</section>
+
+<section class="form--section">
+  <h3 class="form--section-title"><%= t("msgraph_mail.settings.azure_setup") %></h3>
+  
+  <div class="form--field-instructions">
+    <p><%= t("msgraph_mail.settings.azure_instructions") %></p>
+    
+    <ol style="margin-top: 1em; padding-left: 1.5em;">
+      <li style="margin-bottom: 0.5em;">
+        <%= t("msgraph_mail.settings.azure_step1_html").html_safe %>
+      </li>
+      <li style="margin-bottom: 0.5em;">
+        <%= t("msgraph_mail.settings.azure_step2") %>
+      </li>
+      <li style="margin-bottom: 0.5em;">
+        <%= t("msgraph_mail.settings.azure_step3") %>
+      </li>
+      <li style="margin-bottom: 0.5em;">
+        <%= t("msgraph_mail.settings.azure_step4") %>
+      </li>
+      <li style="margin-bottom: 0.5em;">
+        <%= t("msgraph_mail.settings.azure_step5") %>
+      </li>
+    </ol>
+    
+    <h4 style="margin-top: 1.5em;"><%= t("msgraph_mail.settings.required_permissions") %></h4>
+    <ul style="margin-top: 0.5em; padding-left: 1.5em;">
+      <li><code>Mail.Send</code> - <%= t("msgraph_mail.settings.permission_mail_send") %></li>
+    </ul>
+  </div>
+</section>
