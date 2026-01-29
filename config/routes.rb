@@ -12,10 +12,11 @@ OpenProject::Application.routes.draw do
   scope "admin" do
     namespace :msgraph_mail do
       resource :settings, only: [:show] do
-        post :test_connection, on: :member
-        post :send_test_email, on: :member
-        post :activate, on: :member
-        post :deactivate, on: :member
+        # For singular resources, use collection instead of member
+        post :test_connection, on: :collection
+        post :send_test_email, on: :collection
+        post :activate, on: :collection
+        post :deactivate, on: :collection
       end
     end
   end
